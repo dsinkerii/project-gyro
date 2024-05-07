@@ -7,7 +7,7 @@ public class fpsCounter : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     bool DebugOn;
     void Start(){
-        DebugOn = PlayerPrefs.GetInt("DebugOn") != 0;
+        DebugOn = PlayerPrefs.GetInt("DebugOn") == 1;
         if(!DebugOn){
             text.gameObject.SetActive(false);
         }

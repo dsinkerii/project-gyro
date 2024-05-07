@@ -118,7 +118,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RingColor: {r: 0.9780392, g: 0.97207844, b: 0.99419606, a: 0.96}
+    - _RingColor: {r: 0.9882353, g: 0.99419606, b: 0.97207844, a: 0.96}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &3613353457897657539

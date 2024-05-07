@@ -12,8 +12,8 @@ public class TitleCardOffset : MonoBehaviour
         string processedName = "";
         int index = 0;
         foreach(char c in Name){
+            processedName += $"<voffset={Mathf.RoundToInt(Mathf.Sin(index/3f+Time.time)/5f*100)/100f}em>{c}</voffset>";
             index++;
-            processedName += $"<voffset={Mathf.Sin(index/3f+Time.time)/5f}em>{c}</voffset>";
         }
         upper.text = processedName;
         middle.text = processedName;

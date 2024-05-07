@@ -12,7 +12,10 @@ public class GyroCubeVisualisator : MonoBehaviour
     bool isOn;
     void Start(){
         isOn = PlayerPrefs.GetInt("CubeOn") == 1 ? true : false;
-        if(!isOn){
+        if(isOn){
+            GetComponent<MeshRenderer>().enabled = true;
+            Outline.enabled = true;
+        }else{
             GetComponent<MeshRenderer>().enabled = false;
             Outline.enabled = false;
         }

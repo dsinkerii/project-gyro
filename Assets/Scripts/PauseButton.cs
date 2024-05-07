@@ -17,6 +17,17 @@ public class PauseButton : MonoBehaviour
         if(settings.TrackStarted){
             Toggle = !Toggle;
             settings.PauseTrack(Toggle);
+            if(Toggle){
+                if(Application.platform != RuntimePlatform.Android){
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                }
+            }else{
+                if(Application.platform != RuntimePlatform.Android){
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Confined;
+                }
+            }
         }
     }
     void Update(){

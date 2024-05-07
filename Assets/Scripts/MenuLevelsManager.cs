@@ -56,11 +56,16 @@ public class MenuLevelsManager : MonoBehaviour
         string[] trackFolders = Directory.GetDirectories(Application.persistentDataPath);
         print($"Searching: {Application.persistentDataPath}");
         foreach (string folder in trackFolders){
-            string trackInfoPath = Path.Combine(folder, "track.json");
+            string subfolder = folder;
+            while(Directory.GetDirectories(subfolder).Length != 0){
+                subfolder = Directory.GetDirectories(subfolder)[0];
+            }
+            
+            string trackInfoPath = Path.Combine(subfolder, "track.json");
             if (File.Exists(trackInfoPath)){
                 string json = File.ReadAllText(trackInfoPath);
                 TrackInfo track = JsonUtility.FromJson<TrackInfo>(json);
-                string thumbnailPath = Path.Combine(folder, "thumbnail.png");
+                string thumbnailPath = Path.Combine(subfolder, "thumbnail.png");
                 if (File.Exists(thumbnailPath)){
                     byte[] thumbnailBytes = File.ReadAllBytes(thumbnailPath);
                     Texture2D thumbnailTexture = new Texture2D(160, 90);
@@ -68,9 +73,9 @@ public class MenuLevelsManager : MonoBehaviour
                     track.thumbnail = thumbnailTexture;
                 }
 
-                track.notes = TrackNotes.LoadNotes(Path.Combine(folder, "notes.json"));
-                track.trackAudio = Path.Combine(folder,"track.wav");
-                track.ID = Path.GetFileName(folder.TrimEnd(Path.DirectorySeparatorChar));
+                track.notes = TrackNotes.LoadNotes(Path.Combine(subfolder, "notes.json"));
+                track.trackAudio = Path.Combine(subfolder,"track.wav");
+                track.ID = Path.GetFileName(subfolder.TrimEnd(Path.DirectorySeparatorChar));
                 tracks.Add(track);
 
                 GameObject TrackGridElement = Instantiate(TrackPlaceholder);
