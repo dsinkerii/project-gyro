@@ -15,12 +15,21 @@ public class MenuLevelsManager : MonoBehaviour
         public int length;
         public int bpm;
         public string author;
+        public float trackStartOffset;
+        public int Version;
+        public Color32 rightColor = new Color32(77,218,185,255);
+        public Color32 upColor = new Color32(180,218,77,255);
+        public Color32 leftColor = new Color32(218,77,109,255);
+        public Color32 downColor = new Color32(115,77,218,255);
+        public Color32 rollColor = new Color32(218,150,77,255);
+        public Color32 heatModeColor = new Color32(49,48,102,255);
+        public Color32 bar1Color = new Color32(133,239,255,30);
+        public Color32 bar2Color = new Color32(18,84,142,255);
+        [Header("DO NOT write to the track.json, or i will bite your ears off")]
         public Texture2D thumbnail; 
         public string trackAudio;
-        public List<TrackNotes.Note> notes;
-        public float trackStartOffset;
         public string ID;
-        public int Version;
+        public List<TrackNotes.Note> notes;
     }
     [SerializeField] GameObject TrackPlaceholder;
     [SerializeField] GameObject DownloadedTracks;
@@ -42,11 +51,26 @@ public class MenuLevelsManager : MonoBehaviour
     void Start(){
         TrackView.SetActive(false);
         Refresh();
+        //SaveToFolder("cock", tracks[0]); -- ignore that please
     }
     void FixedUpdate(){
         if(PointerLerpPos != null){
             Pointer.transform.position = Vector3.Lerp(Pointer.transform.position, PointerLerpPos.position, 0.2f);
         }
+    }
+    public static void SaveToFolder(string name, TrackInfo info){ // todo
+        string path = Path.Combine(Application.persistentDataPath, name);
+        Directory.CreateDirectory(path);
+
+        string jsonNotesInfo = JsonUtility.ToJson(info.notes);
+        File.WriteAllText(Path.Combine(path, "notes.json"), jsonNotesInfo);
+
+        info.notes = null;
+        info.trackAudio = null;
+        info.thumbnail = null;
+        info.ID = null;
+        string jsonInfo = JsonUtility.ToJson(info);
+        File.WriteAllText(Path.Combine(path, "track.json"), jsonInfo);
     }
     public void Refresh(){
         foreach(Transform child in DownloadedTracks.transform){
@@ -154,13 +178,14 @@ public class MenuLevelsManager : MonoBehaviour
     }
     IEnumerator DisplayDrop(){
         TrackView.transform.localPosition = new Vector3(TrackView.transform.localPosition.x,-50,TrackView.transform.localPosition.z);
-        for(int i = 0; i < 100; i++){
+        float StartTime = Time.time;
+        while(Time.time - StartTime < 1){
             TrackView.transform.localPosition = new Vector3(
                 TrackView.transform.localPosition.x,
-                Mathf.Lerp(TrackView.transform.localPosition.y,0,0.08f),
+                Mathf.Lerp(TrackView.transform.localPosition.y,0,8f*Time.deltaTime),
                 TrackView.transform.localPosition.z
             );
-            yield return new WaitForSeconds(0.01f);
+            yield return 1;
         }
     }
 }

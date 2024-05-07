@@ -2891,6 +2891,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings: {fileID: 111226061}
   trackNotes: {fileID: 521502126}
+  RightNote: {fileID: 2100000, guid: 7ae68743bfac9f39783cfbb1822c6afd, type: 2}
+  UpNote: {fileID: 2100000, guid: 907943d3cf7c5b565b0e1b8a08b7e8b3, type: 2}
+  LeftNote: {fileID: 2100000, guid: c8b1382c9e1ff07f7933ad13fe071643, type: 2}
+  DownNote: {fileID: 2100000, guid: 95cad01ccbd8d5bf18eea302e54d89fa, type: 2}
+  RollNote: {fileID: 2100000, guid: 1a9dc68dc0e63378285ab76d7805a094, type: 2}
+  BG: {fileID: 2100000, guid: 9d5ff153de0dd6a86b71fa144c8ec8e7, type: 2}
 --- !u!1 &925698861
 GameObject:
   m_ObjectHideFlags: 0

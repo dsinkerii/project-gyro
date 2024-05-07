@@ -18,7 +18,7 @@ public class TrackSettings : MonoBehaviour
     [SerializeField] GameObject Level;
     [SerializeField] Material Background;
     [SerializeField] Color FromColorHeat;
-    [SerializeField] Color ToColorHeat;
+    public Color ToColorHeat;
     Color _currColorHeat;
     float[] spectrum = new float[64];
     float[] spectrumBGData = new float[10];

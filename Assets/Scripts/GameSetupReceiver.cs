@@ -6,6 +6,12 @@ public class GameSetupReceiver : MonoBehaviour
 {
     [SerializeField] TrackSettings settings;
     [SerializeField] TrackNotes trackNotes;
+    [SerializeField] Material RightNote;
+    [SerializeField] Material UpNote;
+    [SerializeField] Material LeftNote;
+    [SerializeField] Material DownNote;
+    [SerializeField] Material RollNote;
+    [SerializeField] Material BG;
     public void ReceiveData(MenuLevelsManager.TrackInfo Info, float volume = 0.149f)
     {
         print("Getting Data..");
@@ -16,6 +22,15 @@ public class GameSetupReceiver : MonoBehaviour
         settings.BPM = Info.bpm;
         settings.TrackStartOffset = Info.trackStartOffset;
         trackNotes.notes = Info.notes;
+
+        RightNote.SetColor("_Color", Info.rightColor);
+        UpNote.SetColor("_Color", Info.upColor);
+        LeftNote.SetColor("_Color", Info.leftColor);
+        DownNote.SetColor("_Color", Info.downColor);
+        RollNote.SetColor("_Color", Info.rollColor);
+        BG.SetColor("_Color", Info.bar1Color);
+        BG.SetColor("_Color2", Info.bar2Color);
+        settings.ToColorHeat = Info.heatModeColor;
 
         StartCoroutine(LoadAudio(Info.trackAudio, Info.name));
 
@@ -40,3 +55,4 @@ public class GameSetupReceiver : MonoBehaviour
         return request;
     }
 }
+

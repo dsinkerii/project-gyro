@@ -113,11 +113,11 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - _xMult: -0.0006136894
+    - _xMult: 0.038540497
     - _xPower: 1.7
-    - _yMult: 0.0005791978
+    - _yMult: -0.018776894
     - _yPower: 0.9999921
-    - _zMult: 0.000018497733
+    - _zMult: 0.025181465
     - _zRot: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
