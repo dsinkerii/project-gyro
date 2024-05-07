@@ -53,7 +53,8 @@ Rules on editing:
   - "bpm" // int, BPM
   - "author" // string, self explanatory
   - "trackStartOffset" // float, time before starting to count the beats and subBeats
-  - "version" // int, track file format (latest one is 1)
+  - "version" // int, track file format (latest one is 2)
+  - "rightColor", "upColor", etc // color32, RGBA colors for custom themes. bar1Color and bar2Color are the spectogram bars. heatModeColor = color, that changes the bg color on heat mode.
 - notes.json:
   - "beatTime" // int, be careful! this actually means a quarter of a regular beat! i know, it's confusing, but sorry, precision.. (also note, each note **MUST** be sorted by beatTime, otherwise it wont spawn unsorted notes, check the template for context)
   - "subBeatTime" // int a quarter of a quarter of a regular beat.
