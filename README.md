@@ -28,6 +28,8 @@ A more in-depth tutorial:
 
 Simple. You get a download link either by the creator, you paste it in, and you're good to go
 
+Example of a link: https://github.com/dsinkerii/project-gyro/releases/download/1/song.zip
+
 (and for creators, please make sure its a direct link to the download, so no redirects, google drives, any other drives or whatever. it must be a link that you can press on, and it will immediately start downloading. a good example of it is https://filebin.net for temporary files)
 
 ![2024-05-0718-50-48-ezgif com-video-to-gif-converter](https://github.com/dsinkerii/project-gyro/assets/104655906/aa399054-417c-43f9-8ce2-61f7189b210c)
