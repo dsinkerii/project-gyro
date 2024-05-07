@@ -40,8 +40,8 @@ in-game uploading and track builder soon if the game will be good enough.
 
 Currently there doesn't exist a track builder, so you will have to make tracks **manually**, which means you should have knowledge in how to edit files and follow patterns.
 
-1. Download the song.zip from the first release (it's a template song used for testing)
-    https://github.com/dsinkerii/project-gyro/releases/tag/1
+1. Download the Template.zip from the link below (it's a template song used for testing)
+    https://github.com/dsinkerii/project-gyro/releases/download/1.0.2/Template.zip
 2. Unzip it, and edit it at your will.
 
 Rules on editing:
