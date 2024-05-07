@@ -16,7 +16,7 @@ It's dead simple, you see incoming notes, you rotate your phone at the right tim
 A more in-depth tutorial:
 - Seeing any of the 4 listed below notes, you should push your phone in the rotation of the note (e.g. a red note tilting to left means you need to rotate your phone to that direction, pushing your left hand to it)
 
-  Notes: Red (left), Right (cyan), Up (green), Down (purple)
+  Notes: Left (red), Right (cyan), Up (green), Down (purple)
 ![tutorial_notes](https://github.com/dsinkerii/project-gyro/assets/104655906/a135c70f-066d-4a87-9121-c97c2b18e6d3)
 
 - Seeing an orange note (big orange circle), you need to rotate your phone kind of like when rotating a valve, in clockwise or counter-clockwise rotation
