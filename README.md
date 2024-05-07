@@ -28,7 +28,7 @@ A more in-depth tutorial:
 
 Simple. You get a download link either by the creator, you paste it in, and you're good to go
 
-Example of a link: https://github.com/dsinkerii/project-gyro/releases/download/1/song.zip
+Example of a link: https://github.com/dsinkerii/project-gyro/releases/download/1.0.2/Template.zip
 
 (and for creators, please make sure its a direct link to the download, so no redirects, google drives, any other drives or whatever. it must be a link that you can press on, and it will immediately start downloading. a good example of it is https://filebin.net for temporary files)
 
