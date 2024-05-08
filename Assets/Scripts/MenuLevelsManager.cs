@@ -38,10 +38,12 @@ public class MenuLevelsManager : MonoBehaviour
     [SerializeField] GameObject SelectedTrackObject;
     [SerializeField] GameObject TrackView;
     [SerializeField] GameObject Pointer;
+    [SerializeField] GameObject DeleteTrack;
     [SerializeField] RawImage imageDisplay;
     [SerializeField] TextMeshProUGUI NameDisplay;
     [SerializeField] TextMeshProUGUI NameDesc;
     private Transform PointerLerpPos;
+    public Toggle DeleteMode;
     public List<TrackInfo> tracks = new List<TrackInfo>();
     public int SelectedId;
     public List<GameObject> GridTracks = new List<GameObject>();
@@ -80,43 +82,55 @@ public class MenuLevelsManager : MonoBehaviour
         string[] trackFolders = Directory.GetDirectories(Application.persistentDataPath);
         print($"Searching: {Application.persistentDataPath}");
         foreach (string folder in trackFolders){
+            GameObject TrackGridElement;
+            TrackGridElement = Instantiate(TrackPlaceholder);
+            TrackGridElement.transform.SetParent(DownloadedTracks.transform);
+            TrackGridElement.transform.localEulerAngles = TrackPlaceholder.transform.localEulerAngles;
+            TrackGridElement.transform.localScale = TrackPlaceholder.transform.localScale;
+            TrackGridElement.transform.localPosition = TrackPlaceholder.transform.localPosition;
+
+            GridTrackUI GTUI = TrackGridElement.GetComponent<GridTrackUI>();
             string subfolder = folder;
             while(Directory.GetDirectories(subfolder).Length != 0){
                 subfolder = Directory.GetDirectories(subfolder)[0];
             }
-            
-            string trackInfoPath = Path.Combine(subfolder, "track.json");
-            if (File.Exists(trackInfoPath)){
-                string json = File.ReadAllText(trackInfoPath);
-                TrackInfo track = JsonUtility.FromJson<TrackInfo>(json);
-                string thumbnailPath = Path.Combine(subfolder, "thumbnail.png");
-                if (File.Exists(thumbnailPath)){
-                    byte[] thumbnailBytes = File.ReadAllBytes(thumbnailPath);
-                    Texture2D thumbnailTexture = new Texture2D(160, 90);
-                    thumbnailTexture.LoadImage(thumbnailBytes);
-                    track.thumbnail = thumbnailTexture;
+            GTUI.folder = subfolder;
+
+            try{   
+                string trackInfoPath = Path.Combine(subfolder, "track.json");
+                if (File.Exists(trackInfoPath)){
+                    string json = File.ReadAllText(trackInfoPath);
+                    TrackInfo track = JsonUtility.FromJson<TrackInfo>(json);
+                    string thumbnailPath = Path.Combine(subfolder, "thumbnail.png");
+                    if (File.Exists(thumbnailPath)){
+                        byte[] thumbnailBytes = File.ReadAllBytes(thumbnailPath);
+                        Texture2D thumbnailTexture = new Texture2D(160, 90);
+                        thumbnailTexture.LoadImage(thumbnailBytes);
+                        track.thumbnail = thumbnailTexture;
+                    }
+
+                    track.notes = TrackNotes.LoadNotes(Path.Combine(subfolder, "notes.json"));
+                    track.trackAudio = Path.Combine(subfolder,"track.wav");
+                    track.ID = Path.GetFileName(subfolder.TrimEnd(Path.DirectorySeparatorChar));
+                    tracks.Add(track);
+
+                    TrackGridElement.name = track.name;
+                    GridTracks.Add(TrackGridElement);
+
+                    GTUI.Info = track;
+                    GTUI.manager = this;
+                    GTUI.LoadTrack();
+
+                    TrackGridElement.SetActive(true);
+                }else{
+                    Destroy(TrackGridElement);
                 }
-
-                track.notes = TrackNotes.LoadNotes(Path.Combine(subfolder, "notes.json"));
-                track.trackAudio = Path.Combine(subfolder,"track.wav");
-                track.ID = Path.GetFileName(subfolder.TrimEnd(Path.DirectorySeparatorChar));
-                tracks.Add(track);
-
-                GameObject TrackGridElement = Instantiate(TrackPlaceholder);
-                TrackGridElement.transform.SetParent(DownloadedTracks.transform);
-                TrackGridElement.transform.localEulerAngles = TrackPlaceholder.transform.localEulerAngles;
-                TrackGridElement.transform.localScale = TrackPlaceholder.transform.localScale;
-                TrackGridElement.transform.localPosition = TrackPlaceholder.transform.localPosition;
-                TrackGridElement.name = track.name;
-                GridTracks.Add(TrackGridElement);
-
-                GridTrackUI GTUI = TrackGridElement.GetComponent<GridTrackUI>();
-                GTUI.Info = track;
-                GTUI.manager = this;
+            }catch (System.Exception e) {
+                GTUI.Error = true;
+                GTUI.ErrorText = e.Message;
                 GTUI.LoadTrack();
-
                 TrackGridElement.SetActive(true);
-            }
+            } 
         }
         ContentGrid.UpdateHeight(GridTracks.Count);
     }
@@ -130,16 +144,32 @@ public class MenuLevelsManager : MonoBehaviour
         }
         return -1;
     }
-    public void ShowOnDisplay(TrackInfo trackInfo){
-        StartCoroutine(DisplayDrop());
-        SelectedId = SearchTrackID(trackInfo);
-        SelectedTrackObject = GridTracks[SelectedId];
-        PointerLerpPos = SelectedTrackObject.transform;
-        TrackView.SetActive(true);
-        Pointer.SetActive(true);
-        imageDisplay.texture = trackInfo.thumbnail;
-        NameDisplay.text = trackInfo.name;
-        NameDesc.text = $"PB:{PlayerPrefs.GetInt($"PB:{trackInfo.ID}")}\nLast score:{PlayerPrefs.GetInt($"LAST:{trackInfo.ID}")}\nBy: {trackInfo.author}\nLength: {trackInfo.length}s\nBPM: {trackInfo.bpm}";
+    string folderToDelete;
+    public void ShowOnDisplay(TrackInfo trackInfo, string folder, bool IsError){
+        if(!DeleteMode.isOn){
+            if(!IsError){
+                StartCoroutine(DisplayDrop());
+                SelectedId = SearchTrackID(trackInfo);
+                SelectedTrackObject = GridTracks[SelectedId];
+                PointerLerpPos = SelectedTrackObject.transform;
+                TrackView.SetActive(true);
+                Pointer.SetActive(true);
+                imageDisplay.texture = trackInfo.thumbnail;
+                NameDisplay.text = trackInfo.name;
+                NameDesc.text = $"PB:{PlayerPrefs.GetInt($"PB:{trackInfo.ID}")}\nLast score:{PlayerPrefs.GetInt($"LAST:{trackInfo.ID}")}\nBy: {trackInfo.author}\nLength: {trackInfo.length}s\nBPM: {trackInfo.bpm}";
+            }
+        }else{
+            folderToDelete = folder;
+            DeleteTrack.SetActive(true);
+        }
+    }
+    public void deleteIt(){
+        if(folderToDelete != null){
+            Directory.Delete(folderToDelete, true);
+            DeleteMode.isOn = false;
+            DeleteTrack.SetActive(false);
+            Refresh();
+        }
     }
     public void DownloadFile(TMP_InputField zipFileURL){
         if(zipFileURL.text.Length != 0)

@@ -12,14 +12,37 @@ public class GameSetupReceiver : MonoBehaviour
     [SerializeField] Material DownNote;
     [SerializeField] Material RollNote;
     [SerializeField] Material BG;
+
+    MenuLevelsManager.TrackInfo VersionResolver(MenuLevelsManager.TrackInfo Info){
+        switch (Info.Version){
+            case 1:
+            case 2:
+                print("Upgrading to version 3..");
+                int idx = 0;
+                foreach(TrackNotes.Note note in trackNotes.notes){
+                    TrackNotes.Note newNote = note;
+                    newNote.subBeatTime = newNote.subBeatTime + (newNote.beatTime % 4) * 4;
+                    newNote.beatTime /= 4;
+                    trackNotes.notes[idx] = newNote;
+                    idx++;
+                }
+                break;
+            default:
+                //latest version!
+                break;
+        }
+        return Info;
+    }
+
     public void ReceiveData(MenuLevelsManager.TrackInfo Info, float volume = 0.149f)
     {
         print("Getting Data..");
+        //Info = VersionResolver(Info);
+        settings.BPM = Info.bpm;
         settings.TrackName = Info.name;
         settings.TrackID = Info.ID;
 
         settings.music.volume = volume;
-        settings.BPM = Info.bpm;
         settings.TrackStartOffset = Info.trackStartOffset;
         trackNotes.notes = Info.notes;
 

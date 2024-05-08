@@ -6,18 +6,24 @@ public class GyroCubeVisualisator : MonoBehaviour
 {
     [SerializeField] GyroValues Values;
     [SerializeField] Material CubeMat;
-    [SerializeField] float lerpVal = 0.2f;
+    public float lerpVal = 0.2f;
     [SerializeField] Transform UICube;
     [SerializeField] MeshRenderer Outline;
+    [SerializeField] bool settings = false;
     bool isOn;
     void Start(){
-        isOn = PlayerPrefs.GetInt("CubeOn") == 1 ? true : false;
-        if(isOn){
-            GetComponent<MeshRenderer>().enabled = true;
-            Outline.enabled = true;
+        if(!settings){
+            isOn = PlayerPrefs.GetInt("CubeOn") == 1 ? true : false;
+            lerpVal = PlayerPrefs.GetInt("lerpSpeed") == 0 ? 0.2f : 1;
+            if(isOn){
+                GetComponent<MeshRenderer>().enabled = true;
+                Outline.enabled = true;
+            }else{
+                GetComponent<MeshRenderer>().enabled = false;
+                Outline.enabled = false;
+            }
         }else{
-            GetComponent<MeshRenderer>().enabled = false;
-            Outline.enabled = false;
+            isOn = true;
         }
     }
 

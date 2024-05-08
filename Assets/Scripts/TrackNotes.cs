@@ -10,7 +10,7 @@ public class TrackNotes : MonoBehaviour
         public int subBeatTime;
         public IncomingPartPath.Direction direction;
     };
-    [Header("Please make sure that:\n- subBeatTime is >= 0 and < 4;\n- every note is ordered properly\n  so that one note cant have\n  a beatTime lower than previous.")]
+    [Header("Please make sure that:\n- subBeatTime is >= 0 and < 16;\n- every note is ordered properly\n  so that one note cant have\n  a beatTime lower than previous.")]
     public List<Note> notes;
 
     public static void SaveNotes(string FilePath, List<Note> _notes)

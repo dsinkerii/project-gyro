@@ -40,10 +40,10 @@ public class IncomingPartPath : MonoBehaviour
     {
         double elapsedTime = (settings.TimeDspFixed - PauseTime - spawnTime);
 
-        double progress = elapsedTime / ((60f / settings.BPM) * 4); 
+        double progress = elapsedTime / ((60f / settings.BPM) * 8); 
 
-        Time = Mathf.LerpUnclamped(0f, 75f, (float)progress); // for some reason, when Time == 100, it takes 5 beats to arrive, so this (now it takes 6)
-        // "solution" makes it 4 beats to arrive
+        Time = Mathf.LerpUnclamped(0f, 100f, (float)progress); // additional +25 for more time for the player
+        // "solution" makes it 6 beats to arrive
 
         if(Time > 150){
             Destroy(this.gameObject);

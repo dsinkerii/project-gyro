@@ -25,7 +25,7 @@ public class TrackSettings : MonoBehaviour
     [SerializeField] float LerpSpeed = 0.15f;
     [SerializeField] float Multiplier = 200;
     [SerializeField] TrackNotes.Note nextNote;
-    int nextFrameUpdate = 3; // update once in 3 frames
+    int nextFrameUpdate = 3; // update once in 3 frames, used for spectrum
 
     [Header("Read Only.")]
     public int BeatCounter;
@@ -34,9 +34,10 @@ public class TrackSettings : MonoBehaviour
     public int NotesHit;
     public int NotesHitInHeatMode;
     public bool IsTrackPlaying;
-    private float beatInterval;
+    private double beatInterval;
     public double lastBeatTime;
     private double lastSubBeatTime;
+    private double startTime;
     public bool TrackStarted;
     public double TimeDspFixed;
     private double TimeDspLastPause;
@@ -49,7 +50,7 @@ public class TrackSettings : MonoBehaviour
     [SerializeField] GameObject NoteRoll;
     [SerializeField] Transform NoteParent;
     void Start(){
-        beatInterval = 60f / BPM;
+        beatInterval = 60d / BPM;
         lastBeatTime = AudioSettings.dspTime;
         lastSubBeatTime = AudioSettings.dspTime;
 
@@ -83,6 +84,7 @@ public class TrackSettings : MonoBehaviour
         Level.SetActive(true);
         lastBeatTime = AudioSettings.dspTime-TrackStartOffset;
         lastSubBeatTime = AudioSettings.dspTime-TrackStartOffset;
+        startTime = AudioSettings.dspTime;
     }
     public void PauseTrack(bool Toggle){
         if(Toggle){
@@ -103,38 +105,62 @@ public class TrackSettings : MonoBehaviour
     }
     void FixedUpdate()
     {
-        TimeDspFixed = AudioSettings.dspTime - TimeDspLastPause;
+        UpdateSpectrumData();
+        UpdateBackgroundColors();
+        UpdateTiming();
+        CheckAndSpawnNotes();
+    }
+
+    void UpdateSpectrumData()
+    {
+        if (nextFrameUpdate == 0)
+        {
+            music.GetSpectrumData(spectrum, 0, FFTWindow.Hamming);
+        }
+        nextFrameUpdate = (nextFrameUpdate + 1) % 3;
+    }
+
+    void UpdateBackgroundColors()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            spectrumBGData[i] = Mathf.Lerp(spectrumBGData[i], spectrum[Mathf.FloorToInt(i * 6.4f)] * Multiplier, LerpSpeed);
+            Background.SetFloat($"_val_{i}", spectrumBGData[i]);
+        }
         if(HeatMode){
             _currColorHeat = Color.Lerp(_currColorHeat, ToColorHeat, 0.1f);
         }else{
             _currColorHeat = Color.Lerp(_currColorHeat, FromColorHeat, 0.1f);
         }
-        Background.SetColor("_heatcolor",_currColorHeat);
-        if(TrackStarted && IsTrackPlaying){
+        Background.SetColor("_heatcolor", _currColorHeat);
+    }
+
+    void UpdateTiming()
+    {
+        TimeDspFixed = AudioSettings.dspTime - TimeDspLastPause;
+        if (TrackStarted && IsTrackPlaying){
+        // currenttime - lastbeattime - 0.05 > (currenttime - starttime) % beattime
             double currentTime = TimeDspFixed;
 
-            Background.SetFloat("_beat",Mathf.Lerp(0.025f,0.01f, (float)((currentTime - lastBeatTime) / beatInterval)));
+            Background.SetFloat("_beat", Mathf.Lerp(0.025f, 0.01f, (float)((currentTime - lastBeatTime) / beatInterval)));
 
-            if (currentTime - lastSubBeatTime >= (beatInterval/4))
+            if (currentTime - lastSubBeatTime - 0.05d >= (currentTime - startTime) % (beatInterval / 4))
             {
-                //Sub-Beat!!
                 SubBeatCounter++;
                 lastSubBeatTime = currentTime;
             }
-            if (currentTime - lastBeatTime >= beatInterval)
+            if (currentTime - lastBeatTime - 0.05d >= (currentTime - startTime) % (beatInterval * 4))
             {
-                //Beat!!
                 BeatCounter++;
                 SubBeatCounter = 0;
                 lastBeatTime = currentTime;
             }
-            CheckAndSpawnNotes();
         }
     }
-
     void CheckAndSpawnNotes(){
         if(trackNotes.notes.Count > 0){
-        if(nextNote.beatTime == BeatCounter && nextNote.subBeatTime == (SubBeatCounter%4)){
+            // -1 and +8 for more time for the note to spawn
+        if((nextNote.beatTime == BeatCounter+1 && nextNote.subBeatTime == ((SubBeatCounter)%16)) || (nextNote.beatTime < BeatCounter+1 && nextNote.subBeatTime < ((SubBeatCounter)%16))){
             trackNotes.notes.Remove(nextNote);
             //Note spawn
             GameObject SpawnNote;

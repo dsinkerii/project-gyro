@@ -28,7 +28,7 @@ public class DebugVals : MonoBehaviour
                     $"\nSec:{Time.time}"+
                     $"\nBPM:{settings.BPM}"+
                     $"\nScore:{settings.Score}"+
-                    $"\nbeat:{settings.BeatCounter}:{settings.SubBeatCounter % 4}"+
+                    $"\nbeat:{settings.BeatCounter}:{settings.SubBeatCounter % 16}"+
                     $"\nheatMode:{settings.HeatMode}"+
                     $"\nVer:{Application.version}";
         }

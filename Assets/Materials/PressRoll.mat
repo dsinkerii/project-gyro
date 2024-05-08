@@ -100,12 +100,12 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
-    - _Multiply: 1.17
+    - _Multiply: 0.8
     - _OcclusionStrength: 1
     - _Offset: 0
     - _Parallax: 0.005
-    - _Power: 9.17
-    - _Power2: 2.37
+    - _Power: 6.54
+    - _Power2: 0.78
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
