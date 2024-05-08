@@ -45,7 +45,7 @@ Currently there doesn't exist a track builder, so you will have to make tracks *
 2. Unzip it, and edit it at your will.
 
 Rules on editing:
-- Thumbnail.png **MUST** be 160x90, otherwise it may render incorrectly.
+- Thumbnail.png **MUST** be in multiples of 160x90 (e.g. 320x180, 480x270, etc, but keep it low-res), otherwise it may render incorrectly.
 - track.wav **MUST** be called "track.wav", and **MUST** be in .wav format (for best precision)
 - track.json needs to have the following:
   - "name" // string, track name
