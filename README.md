@@ -28,7 +28,7 @@ A more in-depth tutorial:
 
 Simple. You get a download link either by the creator, you paste it in, and you're good to go
 
-Example of a link: https://github.com/dsinkerii/project-gyro/releases/download/1.0.2/Template.zip
+Example of a link: https://github.com/dsinkerii/project-gyro/releases/download/PRE-1.1/Bad.apple.zip
 
 (and for creators, please make sure its a direct link to the download, so no redirects, google drives, any other drives or whatever. it must be a link that you can press on, and it will immediately start downloading. a good example of it is https://filebin.net for temporary files)
 
@@ -40,24 +40,24 @@ in-game uploading and track builder soon if the game will be good enough.
 
 Currently there doesn't exist a track builder, so you will have to make tracks **manually**, which means you should have knowledge in how to edit files and follow patterns.
 
-1. Download the Template.zip from the link below (it's a template song used for testing)
-    https://github.com/dsinkerii/project-gyro/releases/download/1.0.2/Template.zip
+1. Download any track from [this release](https://github.com/dsinkerii/project-gyro/releases/tag/PRE-1.1)
 2. Unzip it, and edit it at your will.
 
 Rules on editing:
 - Thumbnail.png **MUST** be in multiples of 160x90 (e.g. 320x180, 480x270, etc, but keep it low-res), otherwise it may render incorrectly.
 - track.wav **MUST** be called "track.wav", and **MUST** be in .wav format (for best precision)
+- notes.json **MUST** have `beatTime` and `subBeatTime` sorted, see tracks in [this release](https://github.com/dsinkerii/project-gyro/releases/tag/PRE-1.1) for more context
 - track.json needs to have the following:
   - "name" // string, track name
   - "length" // int, in seconds
   - "bpm" // int, BPM
   - "author" // string, self explanatory
   - "trackStartOffset" // float, time before starting to count the beats and subBeats
-  - "version" // int, track file format (latest one is 2)
+  - "version" // int, track file format (latest one is 3)
   - "rightColor", "upColor", etc // color32, RGBA colors for custom themes. bar1Color and bar2Color are the spectogram bars. heatModeColor = color, that changes the bg color on heat mode.
 - notes.json:
-  - "beatTime" // int, be careful! this actually means a quarter of a regular beat! i know, it's confusing, but sorry, precision.. (also note, each note **MUST** be sorted by beatTime, otherwise it wont spawn unsorted notes, check the template for context)
-  - "subBeatTime" // int a quarter of a quarter of a regular beat.
+  - "beatTime" // int
+  - "subBeatTime" // int, be careful! its range is 0-15, so on 16 it will crash!
   - "direction" // int, must be 0 to 4: 0 = up, 1 = right, 2 = down, 3 = left, 4 = roll
  
 and that's it! have fun! :)
