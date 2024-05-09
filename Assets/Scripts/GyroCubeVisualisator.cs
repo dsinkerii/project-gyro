@@ -14,7 +14,7 @@ public class GyroCubeVisualisator : MonoBehaviour
     void Start(){
         if(!settings){
             isOn = PlayerPrefs.GetInt("CubeOn") == 1 ? true : false;
-            lerpVal = PlayerPrefs.GetInt("lerpSpeed") == 0 ? 0.2f : 1;
+            lerpVal = PlayerPrefs.GetInt("lerpSpeed") == 1 ? 0.2f : 1;
             if(isOn){
                 GetComponent<MeshRenderer>().enabled = true;
                 Outline.enabled = true;

@@ -108,7 +108,6 @@ public class TrackSettings : MonoBehaviour
         UpdateSpectrumData();
         UpdateBackgroundColors();
         UpdateTiming();
-        CheckAndSpawnNotes();
     }
 
     void UpdateSpectrumData()
@@ -144,23 +143,19 @@ public class TrackSettings : MonoBehaviour
 
             Background.SetFloat("_beat", Mathf.Lerp(0.025f, 0.01f, (float)((currentTime - lastBeatTime) / beatInterval)));
 
-            if (currentTime - lastSubBeatTime - 0.05d >= (currentTime - startTime) % (beatInterval / 4))
-            {
+            if (currentTime - lastSubBeatTime - 0.05d >= (currentTime - startTime) % (beatInterval / 4)){
                 SubBeatCounter++;
+                BeatCounter = SubBeatCounter / 16;
                 lastSubBeatTime = currentTime;
-            }
-            if (currentTime - lastBeatTime - 0.05d >= (currentTime - startTime) % (beatInterval * 4))
-            {
-                BeatCounter++;
-                SubBeatCounter = 0;
-                lastBeatTime = currentTime;
+                CheckAndSpawnNotes();
             }
         }
     }
     void CheckAndSpawnNotes(){
+        print($"last sub beat: {SubBeatCounter}");
         if(trackNotes.notes.Count > 0){
             // -1 and +8 for more time for the note to spawn
-        if((nextNote.beatTime == BeatCounter+1 && nextNote.subBeatTime == ((SubBeatCounter)%16)) || (nextNote.beatTime < BeatCounter+1 && nextNote.subBeatTime < ((SubBeatCounter)%16))){
+        if((nextNote.beatTime == (BeatCounter)+1 && nextNote.subBeatTime == ((SubBeatCounter)%16)) || (nextNote.beatTime < (BeatCounter)+1 && nextNote.subBeatTime < ((SubBeatCounter)%16))){
             trackNotes.notes.Remove(nextNote);
             //Note spawn
             GameObject SpawnNote;
@@ -191,7 +186,7 @@ public class TrackSettings : MonoBehaviour
         }
     }
     public IEnumerator WaitForSound(){
-       yield return new WaitUntil(() => music.time >= music.clip.length);
+       yield return new WaitUntil(() => music.time >= (music.clip.length-0.1f));
        finish.GameEnd();
     }
 }

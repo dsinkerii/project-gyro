@@ -52,7 +52,7 @@ public class GameSetupReceiver : MonoBehaviour
         DownNote.SetColor("_Color", Info.downColor);
         RollNote.SetColor("_Color", Info.rollColor);
         BG.SetColor("_Color", Info.bar1Color);
-        BG.SetColor("_Color2", Info.bar2Color);
+        BG.SetColor("_Color_2", Info.bar2Color);
         settings.ToColorHeat = Info.heatModeColor;
 
         StartCoroutine(LoadAudio(Info.trackAudio, Info.name));

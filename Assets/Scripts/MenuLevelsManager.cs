@@ -49,10 +49,14 @@ public class MenuLevelsManager : MonoBehaviour
     public List<GameObject> GridTracks = new List<GameObject>();
     [Header("Track download stuff")]
     [SerializeField] GameObject StatusCodeOBJ;
+    [SerializeField] GameObject downloadDefault;
     [SerializeField] TextMeshProUGUI StatusCodeText;
     void Start(){
         TrackView.SetActive(false);
         Refresh();
+        if(tracks.Count == 0){
+            downloadDefault.SetActive(true);
+        }
         //SaveToFolder("cock", tracks[0]); -- ignore that please
     }
     void FixedUpdate(){
@@ -175,6 +179,21 @@ public class MenuLevelsManager : MonoBehaviour
         if(zipFileURL.text.Length != 0)
             StartCoroutine(DownloadZipFile(zipFileURL.text));
     }
+    public void DefaultDownload(TMP_InputField zipFileURL){
+        StartCoroutine(DownloadZipFileDefault(zipFileURL));
+    }
+    IEnumerator DownloadZipFileDefault(TMP_InputField zipFileURL){
+        zipFileURL.interactable = false;
+        downloadDefault.SetActive(false);
+        zipFileURL.text = "https://github.com/dsinkerii/project-gyro/releases/download/PRE-1.1/RAVEKINGRAVE.zip";
+        yield return StartCoroutine(DownloadZipFile("https://github.com/dsinkerii/project-gyro/releases/download/PRE-1.1/RAVEKINGRAVE.zip"));
+        zipFileURL.text = "https://github.com/dsinkerii/project-gyro/releases/download/PRE-1.1/Chartreuse.Green.zip";
+        yield return StartCoroutine(DownloadZipFile("https://github.com/dsinkerii/project-gyro/releases/download/PRE-1.1/Chartreuse.Green.zip"));
+        zipFileURL.text = "https://github.com/dsinkerii/project-gyro/releases/download/PRE-1.1/Bad.apple.zip";
+        yield return StartCoroutine(DownloadZipFile("https://github.com/dsinkerii/project-gyro/releases/download/PRE-1.1/Bad.apple.zip"));
+        StatusCodeText.text = "downloaded 3 tracks!";
+        zipFileURL.interactable = true;
+    }
     IEnumerator DownloadZipFile(string zipFileURL){
         StatusCodeOBJ.SetActive(false);
         int random = Random.Range(0,1073741823);
@@ -187,6 +206,7 @@ public class MenuLevelsManager : MonoBehaviour
         ZipRequest.downloadHandler = new DownloadHandlerBuffer();
 
         StatusCodeOBJ.SetActive(true);
+        StatusCodeText.color = Color.white;
         StatusCodeText.text = $"downloading...";
         yield return ZipRequest.SendWebRequest();
 

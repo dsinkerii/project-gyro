@@ -15,6 +15,7 @@ public class GyroValues : MonoBehaviour
     [SerializeField] bool Settings = false;
 
     void Start(){
+        LerpSpeed = PlayerPrefs.GetInt("lerpSpeed") == 1 ? 0.5f : 1;
         Input.gyro.enabled = true;
         if(!Settings){
             if(Application.platform != RuntimePlatform.Android){
@@ -22,7 +23,6 @@ public class GyroValues : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
             }
         }
-        LerpSpeed = PlayerPrefs.GetInt("lerpSpeed") == 0 ? 0.5f : 1;
     }
 
     private Vector3 BinaryVector(Vector3 input){
@@ -41,7 +41,7 @@ public class GyroValues : MonoBehaviour
         }
         Rotation = Input.gyro.attitude;
         if(Application.platform == RuntimePlatform.Android)
-            localDeltaRotation = Input.gyro.rotationRateUnbiased* PlayerPrefs.GetInt("Intensity") * 0.1f;
+            localDeltaRotation = Input.gyro.rotationRateUnbiased* PlayerPrefs.GetInt("Intensity") * 0.25f;
         else{
             localDeltaRotation = Vector3.Lerp(localDeltaRotation,new Vector3(-Input.GetAxis("Mouse Y")*10,Input.GetAxis("Mouse X")*10,Input.mouseScrollDelta.y*50),Time.deltaTime*10)* PlayerPrefs.GetInt("Intensity") * 0.1f;
         }

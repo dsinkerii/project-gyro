@@ -6,6 +6,7 @@ public class HitManager : MonoBehaviour
 {
     [SerializeField] GyroValues Values;
     [SerializeField] TrackSettings settings;
+    [SerializeField] AudioSource HitSound;
     [SerializeField] Material RingMaterial;
     [SerializeField] GameObject VisualiseHit;
     [SerializeField] GameObject DisplayCube;
@@ -43,6 +44,7 @@ public class HitManager : MonoBehaviour
                         settings.Score += (9-Mathf.RoundToInt(Vector3.Distance(transform.position, obj.transform.position)))/ (settings.HeatMode ? 1 : 2);
                         ConsecNotes++;
                         settings.NotesHit++;
+                        HitSound.Play();
                         if(Vector3.Distance(transform.position, obj.transform.position) < 2.8f){
                             settings.Score+=5;
                             if(!RPAlreadyRunning){
